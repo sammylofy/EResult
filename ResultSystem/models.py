@@ -11,7 +11,6 @@ PROGRAMME = [
     ('OND', 'Ordinary Diploma'),
     ('ND', 'National Diploma'),
     ('HND', 'Higher National Diploma'),
-    ('WKPG', 'Weekend Programme')
 ]
 
 STATUS_CHOICES = [
@@ -22,7 +21,7 @@ STATUS_CHOICES = [
 
 
 class Faculty(models.Model):
-    faculty_code = models.CharField(max_length=20, unique=True)
+    faculty_code = models.CharField(primary_key=True,null=False,  max_length=20, unique=True)
     faculty_name = models.CharField(max_length=100)
 
     class Meta:
@@ -30,7 +29,7 @@ class Faculty(models.Model):
 
 
 class Department(models.Model):
-    department_code = models.CharField(max_length=20, unique=True)
+    department_code = models.CharField(primary_key=True, max_length=20, null=False, unique=True)
     department_name = models.CharField(max_length=100)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
 
@@ -39,7 +38,7 @@ class Department(models.Model):
 
 
 class Session(models.Model):
-    session_code = models.CharField(max_length=20, unique=True)
+    session_code = models.CharField(primary_key=True, null=False, max_length=20, unique=True)
     session_name = models.CharField(max_length=100)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
 
@@ -48,7 +47,7 @@ class Session(models.Model):
 
 
 class Semester(models.Model):
-    semester_code = models.CharField(max_length=20, unique=True)
+    semester_code = models.CharField(primary_key=True, null=False, max_length=20, unique=True)
     semester_name = models.CharField(max_length=100)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
 
@@ -57,7 +56,7 @@ class Semester(models.Model):
 
 
 class Course(models.Model):
-    course_code = models.CharField(max_length=20, unique=True, primary_key=True)
+    course_code = models.CharField(max_length=20, unique=True, primary_key=True, null=False)
     course_name = models.CharField(max_length=100)
     credit_unit = models.IntegerField(default=0)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
@@ -73,7 +72,7 @@ class Course(models.Model):
 
 
 class Prerequisite(models.Model):
-    prerequisite_code = models.CharField(max_length=10, primary_key=True)
+    prerequisite_code = models.CharField(max_length=10, primary_key=True, null=False, unique=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
@@ -84,7 +83,7 @@ class Prerequisite(models.Model):
 
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    registration_number = models.CharField(max_length=20, unique=True)
+    registration_number = models.CharField(primary_key=True, null=False, max_length=20, unique=True)
     surname = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
     middle_name = models.CharField(maxlength=100, null=True, blank=True)
@@ -117,7 +116,7 @@ class StudentProgress(models.Model):
 
 class Staff(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    staff_id = models.CharField(maxlength=45, unique=True)
+    staff_id = models.CharField(maxlength=45, unique=True, primary_key=True, null=False)
     surname = models.CharField(maxlength=100)
     first_name = models.CharField(maxlength=100)
     middle_name = models.CharField(maxlength=100, null=True, blank=True)
@@ -168,17 +167,6 @@ class CourseEnrolment(models.Model):
 
     class Meta:
         db_table = "course_enrolment"
-
-
-class ExamEligibility(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE)
-    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
-    eligible = models.BooleanField(default=False)  # True if student is eligible for exam
-
-    class Meta:
-        db_table = "exam_eligibility"
 
 
 class ScoreSheet(models.Model):
