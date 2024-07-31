@@ -1,5 +1,6 @@
 from django import forms
-from .models import Faculty, Department, ROLES, STATUS_CHOICES, C_TYPES, SEMESTER, Programme, Session, Course, Student
+from .models import Faculty, Department, ROLES, STATUS_CHOICES, C_TYPES, SEMESTER, Programme, Session, Course, Student, \
+    CourseEnrolment
 
 
 class FacultyForm(forms.ModelForm):
@@ -55,4 +56,12 @@ class StudentForm(forms.ModelForm):
         fields = [
             'registration_number', 'surname', 'first_name', 'middle_name', 'phone_number',
             'email', 'date_of_birth', 'programme', 'faculty', 'department'
+        ]
+
+
+class CourseEnrollmentForm(forms.ModelForm):
+    class Meta:
+        model = CourseEnrolment
+        fields = [
+            'course', 'student', 'session'
         ]

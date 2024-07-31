@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from .forms import FacultyForm, DepartmentForm, ProgrammeForm, SessionForm, CourseForm
+from .forms import FacultyForm, DepartmentForm, ProgrammeForm, SessionForm, CourseForm, StudentForm
 from django.contrib import messages
-from .models import Faculty, Department, Programme, Session, Course
+from .models import Faculty, Department, Programme, Session, Course, Student
 
 
 # Create your views here.
@@ -155,4 +155,31 @@ def getCourse(request, idk):
     course = get_object_or_404(Course, pk=idk)
     context = {'title': title, 'course': course}
     return render(request, 'course.html', context)
+
+
+def add_student(request):
+    title = "Student Registration"
+    if request.method == "POST":
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Student Registration Was Successful')
+        else:
+            messages.error(request, "Student Registration Failed")
+    else:
+        form = StudentForm()
+    return render(request, 'add_student.html', context={'title': title, 'form': form})
+
+
+def viewAllStudent(request):
+    title = "View All Students"
+    students = Student.objects.all()
+    context = {'title': title, 'students': students}
+    return render(request, 'view_students.html', context)
+
+def getStudent(request, idk):
+    title = "Student"
+    student = get_object_or_404(Student, pk=idk)
+    context = {'title':title, 'student':student}
+    return render(request, 'student.html', context)
 
