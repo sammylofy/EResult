@@ -157,11 +157,12 @@ class CourseEnrolment(models.Model):
         db_table = "course_enrolment"
 
 
-class SemesterResult(models.Model):
+class SemesterCourseResult(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     semester = models.CharField(max_length=1, choices=SEMESTER)
     level = models.CharField(maxlength=20)
+    course = models.ForeignKey(CourseEnrolment, on_delete=models.CASCADE) # From the course the student is enrolled in
     practicals = models.DecimalField(max_digits=5, decimal_places=2)
     test_score = models.DecimalField(max_digits=5, decimal_places=2)
     exam_score = models.DecimalField(max_digits=5, decimal_places=2)
@@ -170,12 +171,30 @@ class SemesterResult(models.Model):
     grade_weight = models.DecimalField(max_digits=5, decimal_places=2)
     credit_unit_grade_point = models.DecimalField(max_digits=5, decimal_places=2)
     credit_earned = models.IntegerField(default=0)
-    gpa = models.DecimalField(max_digits=5, decimal_places=2)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table = "semester_results"
+        db_table = "course_results"
+
+
+class Result(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    semester = models.CharField(max_length=1, choices=SEMESTER)
+    level = models.CharField(maxlength=20)
+    tcr = models.IntegerField(default=0)
+    tce = models.IntegerField(default=0)
+    total_credit_grade_points = models.IntegerField(default=0)
+    gpa = models.DecimalField(max_digits=5, decimal_places=2)
+    cgpa = models.DecimalField(max_digits=5, decimal_places=2)
+    carry_over = models.CharField(max_length=100)
+    remarks = models.TextField()
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "results"
 
 
 """
@@ -271,4 +290,4 @@ class UserRole(models.Model):
     role = models.CharField(choices=ROLES, max_length=50, blank=False, null=False)
 
     class Meta:
-        db_table = "userrole"
+        db_table = "user_role"
