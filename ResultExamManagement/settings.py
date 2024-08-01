@@ -82,27 +82,27 @@ WSGI_APPLICATION = "ResultExamManagement.wsgi.application"
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tertiary_education',  # Replace with your actual database name
-        'USER': 'root',  # Use a dedicated database user with restricted privileges
-        'PASSWORD': 'sa1ma52LA!',
-        'HOST': 'localhost',  # Update if your MySQL server is on a different host
-        'PORT': '3306',  # Adjust if your MySQL server uses a non-standard port
-    }
-}
-# Postgre SQL
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'tertiary_institution',
-#         'USER': 'postgres',
-#         'PASSWORD': 'sammy123',
-#         'HOST': '127.0.0.1',
-#         'PORT': '5433',
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'tertiary_education',  # Replace with your actual database name
+#         'USER': 'root',  # Use a dedicated database user with restricted privileges
+#         'PASSWORD': 'sa1ma52LA!',
+#         'HOST': 'localhost',  # Update if your MySQL server is on a different host
+#         'PORT': '3306',  # Adjust if your MySQL server uses a non-standard port
 #     }
 # }
+#Postgre SQL
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tertiary_institution',
+        'USER': 'postgres',
+        'PASSWORD': 'sammy123',
+        'HOST': '127.0.0.1',
+        'PORT': '5433',
+    }
+}
 
 
 # Password validation

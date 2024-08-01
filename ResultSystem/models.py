@@ -81,14 +81,14 @@ class Student(models.Model):
     registration_number = models.CharField(max_length=20, unique=True)
     surname = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
-    middle_name = models.CharField(maxlength=100, null=True, blank=True)
-    phone_number = models.CharField(maxlength=11)
+    middle_name = models.CharField(max_length=100, null=True, blank=True)
+    phone_number = models.CharField(max_length=11)
     email = models.EmailField()
     date_of_birth = models.DateField()
     programme = models.ForeignKey(Programme, on_delete=models.CASCADE)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    status = models.CharField(maxlength=1, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
@@ -107,11 +107,11 @@ class StudentProgress(models.Model):
 
 
 class Staff(models.Model):
-    staff_id = models.CharField(maxlength=45, unique=True)
-    surname = models.CharField(maxlength=100)
-    first_name = models.CharField(maxlength=100)
-    middle_name = models.CharField(maxlength=100, null=True, blank=True)
-    phone_number = models.CharField(maxlength=11)
+    staff_id = models.CharField(max_length=45, unique=True)
+    surname = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    middle_name = models.CharField(max_length=100, null=True, blank=True)
+    phone_number = models.CharField(max_length=11)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     email = models.EmailField()
@@ -141,6 +141,8 @@ class Attendance(models.Model):
     semester = models.CharField(max_length=1, choices=SEMESTER)
     date = models.DateField()  # Date of attendance
     attended = models.BooleanField(default=False)  # True if student attended
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "attendance"
@@ -161,13 +163,13 @@ class SemesterCourseResult(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     semester = models.CharField(max_length=1, choices=SEMESTER)
-    level = models.CharField(maxlength=20)
-    course = models.ForeignKey(CourseEnrolment, on_delete=models.CASCADE) # From the course the student is enrolled in
+    level = models.CharField(max_length=20)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)  # Changed from CourseEnrolment
     practicals = models.DecimalField(max_digits=5, decimal_places=2)
     test_score = models.DecimalField(max_digits=5, decimal_places=2)
     exam_score = models.DecimalField(max_digits=5, decimal_places=2)
     total_score = models.DecimalField(max_digits=5, decimal_places=2)
-    grade = models.CharField(maxlength=2)
+    grade = models.CharField(max_length=2)
     grade_weight = models.DecimalField(max_digits=5, decimal_places=2)
     credit_unit_grade_point = models.DecimalField(max_digits=5, decimal_places=2)
     credit_earned = models.IntegerField(default=0)
@@ -182,7 +184,7 @@ class Result(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     session = models.ForeignKey(Session, on_delete=models.CASCADE)
     semester = models.CharField(max_length=1, choices=SEMESTER)
-    level = models.CharField(maxlength=20)
+    level = models.CharField(max_length=20)
     tcr = models.IntegerField(default=0)
     tce = models.IntegerField(default=0)
     total_credit_grade_points = models.IntegerField(default=0)
@@ -268,7 +270,7 @@ class GeneralEssayAnswer(models.Model):
     expected_answer = models.TextField()
 
     class Meta:
-        db_table = "subjective_answer"
+        db_table = "general_essay_answer"  # Changed from "subjective_answer"
 
 
 class Exam(models.Model):
@@ -285,9 +287,16 @@ class Exam(models.Model):
         db_table = "exam"
 
 
-class UserRole(models.Model):
-    username = models.ForeignKey(User, on_delete=models.CASCADE, primary_key=True)
-    role = models.CharField(choices=ROLES, max_length=50, blank=False, null=False)
+class Role(models.Model):
+    name = models.CharField(max_length=50, unique=True)
 
     class Meta:
-        db_table = "user_role"
+        db_table = "role"
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    roles = models.ManyToManyField(Role)
+
+    class Meta:
+        db_table = "user_profile"

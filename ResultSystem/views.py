@@ -177,9 +177,9 @@ def viewAllStudent(request):
     context = {'title': title, 'students': students}
     return render(request, 'view_students.html', context)
 
+
 def getStudent(request, idk):
     title = "Student"
     student = get_object_or_404(Student, pk=idk)
-    context = {'title':title, 'student':student}
+    context = {'title': title, 'student': student}
     return render(request, 'student.html', context)
-
