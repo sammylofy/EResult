@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from .forms import FacultyForm, DepartmentForm, ProgrammeForm, SessionForm, CourseForm, StudentForm
+from .forms import FacultyForm, DepartmentForm, ProgrammeForm, SessionForm, CourseForm, StudentForm, StaffForm
 from django.contrib import messages
-from .models import Faculty, Department, Programme, Session, Course, Student
+from .models import Faculty, Department, Programme, Session, Course, Student, Staff
 
 
 # Create your views here.
@@ -157,7 +157,7 @@ def getCourse(request, idk):
     return render(request, 'course.html', context)
 
 
-def add_student(request):
+def addStudent(request):
     title = "Student Registration"
     if request.method == "POST":
         form = StudentForm(request.POST)
@@ -183,3 +183,30 @@ def getStudent(request, idk):
     student = get_object_or_404(Student, pk=idk)
     context = {'title': title, 'student': student}
     return render(request, 'student.html', context)
+
+
+def addStaff(request):
+    title = "Add Staff"
+    if request.method == "POST":
+        form = StaffForm()
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Staff added successfully")
+        else:
+            messages.error(request, "Failed to Add Staff")
+    else:
+        form = StaffForm()
+    return render(request, 'add_staff.html', context={'title': title, 'form': form})
+
+
+def viewAllStaff(request):
+    title = "View All Staffs"
+    staffs = Staff.objects.all()
+    context = {'title': title, 'staffs': staffs}
+    return render(request, 'view_staffs.html', context)
+
+
+def getStaff(request, idk):
+    title = "View Staff"
+    staff = get_object_or_404(Staff, pk=idk)
+    return render(request, 'staff.html', context={'title': title, 'staff': staff})

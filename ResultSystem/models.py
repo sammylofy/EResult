@@ -30,6 +30,9 @@ class Faculty(models.Model):
     faculty_code = models.CharField(max_length=20, unique=True)
     faculty_name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return f"{self.faculty_name}"
+
     class Meta:
         db_table = "faculty"
 
@@ -38,6 +41,9 @@ class Department(models.Model):
     department_code = models.CharField(max_length=20, unique=True)
     department_name = models.CharField(max_length=100)
     faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.department_name}"
 
     class Meta:
         db_table = "department"
@@ -48,6 +54,9 @@ class Programme(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
 
+    def __str__(self):
+        return f"{self.prog_name}"
+
     class Meta:
         db_table = "programme"
 
@@ -56,6 +65,9 @@ class Session(models.Model):
     session_code = models.CharField(max_length=20, unique=True)
     session_name = models.CharField(max_length=100)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
+
+    def __str__(self):
+        return f"{self.session_code} {self.status}"
 
     class Meta:
         db_table = "session"
@@ -72,6 +84,9 @@ class Course(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='0')
+
+    def __str__(self):
+        return f"{self.course_code} {self.course_name}"
 
     class Meta:
         db_table = "courses"
@@ -91,6 +106,9 @@ class Student(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.registration_number} {self.surname} {self.first_name}"
 
     class Meta:
         db_table = "student"
@@ -117,6 +135,9 @@ class Staff(models.Model):
     email = models.EmailField()
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.staff_id} {self.surname} {self.first_name}"
 
     class Meta:
         db_table = "staff"
@@ -165,7 +186,7 @@ class SemesterCourseResult(models.Model):
     semester = models.CharField(max_length=1, choices=SEMESTER)
     level = models.CharField(max_length=20)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)  # Changed from CourseEnrolment
-    practicals = models.DecimalField(max_digits=5, decimal_places=2)
+    practicals_score = models.DecimalField(max_digits=5, decimal_places=2)
     test_score = models.DecimalField(max_digits=5, decimal_places=2)
     exam_score = models.DecimalField(max_digits=5, decimal_places=2)
     total_score = models.DecimalField(max_digits=5, decimal_places=2)

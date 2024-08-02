@@ -79,21 +79,21 @@ class AttendanceAdmin(admin.ModelAdmin):
 class CourseEnrolmentAdmin(admin.ModelAdmin):
     list_display = ('student', 'course', 'session')
     search_fields = ('student', 'course')
-    ordering = ('course',)
+    #ordering = ('course',)
     list_filter = ('session',)
 
 
 class SemesterCourseResultAdmin(admin.ModelAdmin):
     list_display = ('student', 'course', 'session', 'semester', 'level', 'total_score', 'grade')
     search_fields = ('student', 'course')
-    ordering = ('course',)
+    #ordering = ('course',)
     list_filter = ('session',)
 
 
 class ResultAdmin(admin.ModelAdmin):
-    list_display = ('student', 'session', 'semester', 'level', 'gpa', 'carry_over', 'remark')
+    list_display = ('student', 'session', 'semester', 'level', 'gpa', 'carry_over')
     search_fields = ('student', 'course')
-    ordering = ('course',)
+    #ordering = ('course',)
     list_filter = ('session',)
 
 
