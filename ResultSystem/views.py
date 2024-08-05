@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .forms import FacultyForm, DepartmentForm, ProgrammeForm, SessionForm, CourseForm, StudentForm, StaffForm
+from .forms import FacultyForm, DepartmentForm, ProgrammeForm, SessionForm, CourseForm, StudentForm, StaffForm, \
+    EditStudentForm
 from django.contrib import messages
 from .models import Faculty, Department, Programme, Session, Course, Student, Staff
 from django.http import JsonResponse
@@ -194,17 +195,18 @@ def editStudent(request, idk):
     student = get_object_or_404(Student, pk=idk)
 
     if request.method == "POST":
-        form = StudentForm(request.POST, instance=student)
+        form = EditStudentForm(request.POST, instance=student)
         if form.is_valid():
             form.save()
             messages.success(request,
                              f"{student.surname}, {student.first_name} {student.middle_name} Was Updated Successfully")
             return redirect('all_student')
     else:
-        form = StudentForm(instance=student)
+        form = EditStudentForm(instance=student)
 
     context = {'title': title, 'form': form, 'student': student}
     return render(request, 'edit_student.html', context)
+
 
 def deleteStudent(request, idk):
     student_instance = get_object_or_404(Student, pk=idk)
@@ -261,3 +263,38 @@ def getStaff(request, idk):
     title = "View Staff"
     staff = get_object_or_404(Staff, pk=idk)
     return render(request, 'staff.html', context={'title': title, 'staff': staff})
+
+
+def editStaff(request, idk):
+    title = "Edit Staff"
+    staff = get_object_or_404(Staff, pk=idk)
+
+    if request.method == "POST":
+        form = StaffForm(request.POST, instance=staff)
+        if form.is_valid():
+            form.save()
+            messages.success(request,
+                             f"{staff.surname}, {staff.first_name} {staff.middle_name} Was Updated Successfully")
+            return redirect('all_staff')
+    else:
+        form = StaffForm(instance=staff)
+    context = {'title': title, 'form': form, 'staff': staff}
+    return render(request, 'edit_staff.html', context)
+
+
+# def deleteStaff(request, idk):
+#     staff_instance = get_object_or_404(Staff, pk=idk)
+#     if request.method == "POST":
+#         staff_instance.delete()
+#         return redirect('all_staff')
+#     return render(request, 'confirm_delete.html', {'staff_instance': staff_instance})
+
+def deleteStaff(request, idk):
+    if request.method == "POST":
+        staff_instance = get_object_or_404(Staff, pk=idk)
+        staff_instance.delete()
+        messages.success(request, "Staff record deleted successfully.")
+        return redirect('all_staff')
+    else:
+        messages.error(request, "Invalid request method.")
+        return redirect('all_staff')

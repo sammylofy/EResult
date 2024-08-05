@@ -1,10 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+<div class="container">
+    <table class="table table-bordered table-sm">
+        <thead>
+            <tr>
+                <th colspan="2" class="text-center">The Single Record</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Name:</strong></td>
+                <td>{{ staff.surname }}, {{ staff.first_name }} {{ staff.middle_name }}</td>
+            </tr>
+            <tr>
+                <td><strong>Staff ID:</strong></td>
+                <td>{{ staff.staff_id.upper }}</td>
+            </tr>
+            <tr>
+                <td><strong>Phone:</strong></td>
+                <td>{{ staff.phone_number }}</td>
+            </tr>
+            <tr>
+                <td><strong>Email:</strong></td>
+                <td>{{ staff.email }}</td>
+            </tr>
+            <tr>
+                <td><strong>Faculty:</strong></td>
+                <td>{{ staff.faculty }}</td>
+            </tr>
+            <tr>
+                <td><strong>Department:</strong></td>
+                <td>{{ staff.department }}</td>
+            </tr>
+            <tr>
+                <td><strong>Date Registered:</strong></td>
+                <td>{{ staff.date_created }}</td>
+            </tr>
+            <tr>
+                <td><strong>Date Updated:</strong></td>
+                <td>{{ staff.date_updated }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

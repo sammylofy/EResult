@@ -40,7 +40,7 @@
                     <td>{{ form.middle_name }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Registration Number:</strong></td>
+                    <td><strong>Student Registration Number:</strong></td>
                     <td>{{ form.registration_number }}</td>
                 </tr>
                 <tr>
@@ -52,14 +52,6 @@
                     <td>{{ form.email }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Date of Birth:</strong></td>
-                    <td>{{ form.date_of_birth }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Programme:</strong></td>
-                    <td>{{ form.programme }}</td>
-                </tr>
-                <tr>
                     <td><strong>Faculty:</strong></td>
                     <td>{{ form.faculty }}</td>
                 </tr>
@@ -68,19 +60,8 @@
                     <td>{{ form.department }}</td>
                 </tr>
                 <tr>
-                    <td><strong>Status:</strong></td>
-                    <td>{{ form.status }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Date Registered:</strong></td>
-                    <td>{{ student.date_created }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Date Updated:</strong></td>
-                    <td>{{ student.date_updated }}</td>
-                </tr>
-                <tr>
                     <td colspan="2" class="text-center">
+                        <a href="{% url 'all_student' %}"><button class="btn btn-secondary">Cancel</button></a>
                         <button type="submit" class="btn btn-primary">Save Changes</button>
                     </td>
                 </tr>

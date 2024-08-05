@@ -53,7 +53,8 @@ class CourseForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['registration_number', 'surname', 'first_name', 'middle_name', 'phone_number', 'email', 'date_of_birth', 'programme', 'faculty', 'department', 'status']
+        fields = ['registration_number', 'surname', 'first_name', 'middle_name', 'phone_number', 'email',
+                  'date_of_birth', 'programme', 'faculty', 'department', 'status']
         # widgets ={
         #     'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         # }
@@ -70,6 +71,33 @@ class StudentForm(forms.ModelForm):
             'department': forms.Select(attrs={'class': 'form-control', 'id': 'department'}),
             'status': forms.Select(attrs={'class': 'form-control'}),
         }
+
+
+class EditStudentForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = ['registration_number', 'surname', 'first_name', 'middle_name', 'phone_number', 'email',
+                  'date_of_birth', 'programme', 'faculty', 'department', 'status']
+        # widgets ={
+        #     'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+        # }
+        widgets = {
+            'registration_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'surname': forms.TextInput(attrs={'class': 'form-control'}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'middle_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'programme': forms.Select(attrs={'class': 'form-control', 'id': 'programme'}),
+            'faculty': forms.Select(attrs={'class': 'form-control', 'id': 'faculty'}),
+            'department': forms.Select(attrs={'class': 'form-control', 'id': 'department'}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(EditStudentForm, self).__init__(*args, **kwargs)
+        self.fields['registration_number'].widget.attrs['readonly'] = True
 
 
 class CourseEnrollmentForm(forms.ModelForm):
