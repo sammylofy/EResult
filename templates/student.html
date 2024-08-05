@@ -1,10 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block content %}
+<div class="container">
+    <table class="table table-bordered table-sm">
+        <thead>
+            <tr>
+                <th colspan="2" class="text-center">The Single Record</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Name:</strong></td>
+                <td>{{ student.surname }}, {{ student.first_name }} {{ student.middle_name }}</td>
+            </tr>
+            <tr>
+                <td><strong>Registration Number:</strong></td>
+                <td>{{ student.registration_number.upper }}</td>
+            </tr>
+            <tr>
+                <td><strong>Phone:</strong></td>
+                <td>{{ student.phone_number }}</td>
+            </tr>
+            <tr>
+                <td><strong>Email:</strong></td>
+                <td>{{ student.email }}</td>
+            </tr>
+            <tr>
+                <td><strong>Date of Birth:</strong></td>
+                <td>{{ student.date_of_birth }}</td>
+            </tr>
+            <tr>
+                <td><strong>Programme:</strong></td>
+                <td>{{ student.programme }}</td>
+            </tr>
+            <tr>
+                <td><strong>Faculty:</strong></td>
+                <td>{{ student.faculty }}</td>
+            </tr>
+            <tr>
+                <td><strong>Department:</strong></td>
+                <td>{{ student.department }}</td>
+            </tr>
+            <tr>
+                <td><strong>Status:</strong></td>
+                <td>{{ student.status }}</td>
+            </tr>
+            <tr>
+                <td><strong>Date Registered:</strong></td>
+                <td>{{ student.date_created }}</td>
+            </tr>
+            <tr>
+                <td><strong>Date Updated:</strong></td>
+                <td>{{ student.date_updated }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

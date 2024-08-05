@@ -1,19 +1,43 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Register Student</h1>
-     {% if messages %}
-            <div class="alert alert-success">
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-            </div>
-     {% endif %}
+<h1>Register Student</h1>
+{% if messages %}
     <div class="container">
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Register Student</button><button type="reset"> Cancel</button>
-        </form>
+        {% for message in messages %}
+            {% if message.tags == 'success' %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% elif message.tags == 'error' %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% else %}
+                <div class="alert alert-info">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
     </div>
+{% endif %}
+<div class="container">
+   <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register Student</button>
+    <button type="reset">Cancel</button>
+</form>
+</div>
     
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        console.log("Document is ready");
+
+        $('#id_programme').change(function() {
+            alert("Programme changed");
+            console.log("Programme changed");
+        });
+
+        $('#id_department').change(function() {
+            alert("Department changed");
+            console.log("Department changed");
+        });
+    });
+</script>
+
 {% endblock %}

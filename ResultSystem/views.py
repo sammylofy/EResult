@@ -1,7 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .forms import FacultyForm, DepartmentForm, ProgrammeForm, SessionForm, CourseForm, StudentForm, StaffForm
 from django.contrib import messages
 from .models import Faculty, Department, Programme, Session, Course, Student, Staff
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -163,7 +164,10 @@ def addStudent(request):
         form = StudentForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Student Registration Was Successful')
+            surname = form.cleaned_data['surname']
+            firstname = form.cleaned_data['first_name']
+            messages.success(request, f"{surname}, {firstname} Registration Was Successful")
+            return redirect('add_student')
         else:
             messages.error(request, "Student Registration Failed")
     else:
@@ -185,17 +189,64 @@ def getStudent(request, idk):
     return render(request, 'student.html', context)
 
 
+def editStudent(request, idk):
+    title = "Edit Student"
+    student = get_object_or_404(Student, pk=idk)
+
+    if request.method == "POST":
+        form = StudentForm(request.POST, instance=student)
+        if form.is_valid():
+            form.save()
+            messages.success(request,
+                             f"{student.surname}, {student.first_name} {student.middle_name} Was Updated Successfully")
+            return redirect('all_student')
+    else:
+        form = StudentForm(instance=student)
+
+    context = {'title': title, 'form': form, 'student': student}
+    return render(request, 'edit_student.html', context)
+
+def deleteStudent(request, idk):
+    student_instance = get_object_or_404(Student, pk=idk)
+    if request.method == "POST":
+        student_instance.delete()
+        return redirect('all_student')
+    return render(request, 'confirm_delete.html', {'student_instance': student_instance})
+
+
+def load_departments(request):
+    programme_id = request.GET.get('programme_id')
+    print(f"Programme ID: {programme_id}")  # Debugging line
+    departments = Department.objects.filter(programme__id=programme_id).values('id',
+                                                                               'department_name') if programme_id else []
+    return JsonResponse(list(departments), safe=False)
+
+
+def load_faculties(request):
+    department_id = request.GET.get('department_id')
+    print(f"Department ID: {department_id}")  # Debugging line
+    faculties = Faculty.objects.filter(department__id=department_id).values('id',
+                                                                            'faculty_name') if department_id else []
+    return JsonResponse(list(faculties), safe=False)
+
+
 def addStaff(request):
     title = "Add Staff"
     if request.method == "POST":
-        form = StaffForm()
+        form = StaffForm(request.POST)  # Pass request.POST to the form
+        cleaned = form.cleaned_data
         if form.is_valid():
+            surname = cleaned['surname']
+            firstname = cleaned['first_name']
             form.save()
-            messages.success(request, "Staff added successfully")
+            messages.success(request, f"{surname}, {firstname} added successfully")
+            return redirect('add_staff')  # Redirect to avoid re-posting form on refresh
         else:
-            messages.error(request, "Failed to Add Staff")
+            print(form.errors)  # Print form errors to the console
+            messages.error(request, "Failed to add staff. Please correct the errors below.")
     else:
         form = StaffForm()
+
     return render(request, 'add_staff.html', context={'title': title, 'form': form})
 
 

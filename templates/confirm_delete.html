@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <div class="container mt-4">
+        <h1>Delete Record</h1>
+        <p>Are you sure you want to delete the record for {{ student_instance.registration_number }}?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <a href="{% url 'all_student' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+    </div>
+    </div>
+{% endblock %}
