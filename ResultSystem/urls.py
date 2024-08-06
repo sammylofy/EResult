@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('add_course/', views.addCourse, name='addCourse'),
     path('add_faculty/', views.addFaculty, name='add_faculty'),
     path('all_faculty/', views.viewAllFaculty, name='all_faculty'),
     path('faculty/<int:id>/', views.getFaculty, name='get_faculty'),
@@ -27,4 +28,6 @@ urlpatterns = [
     path('delete/<int:idk>/', views.deleteStudent, name = 'delete_student'),
     path('ajax/load-departments/', views.load_departments, name='ajax_load_departments'),
     path('ajax/load-faculties/', views.load_faculties, name='ajax_load_faculties'),
+    path('allocate_course/', views.allocateCourse, name ='allocate_course'),
+    path('all_allocated_courses/', views.viewAllocatedCourses, name='all_allocated_courses'),
 ]

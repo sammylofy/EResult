@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import FacultyForm, DepartmentForm, ProgrammeForm, SessionForm, CourseForm, StudentForm, StaffForm, \
-    EditStudentForm
+    EditStudentForm, CourseAllocationForm
 from django.contrib import messages
-from .models import Faculty, Department, Programme, Session, Course, Student, Staff
+from .models import Faculty, Department, Programme, Session, Course, Student, Staff, CourseAllocation
 from django.http import JsonResponse
 
 
@@ -138,6 +138,7 @@ def addCourse(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Course Added Successfully")
+            return redirect('addCourse')
         else:
             messages.error(request, "Adding Course Failed")
     else:
@@ -236,10 +237,9 @@ def addStaff(request):
     title = "Add Staff"
     if request.method == "POST":
         form = StaffForm(request.POST)  # Pass request.POST to the form
-        cleaned = form.cleaned_data
         if form.is_valid():
-            surname = cleaned['surname']
-            firstname = cleaned['first_name']
+            surname = form.cleaned_data['surname']
+            firstname = form.cleaned_data['first_name']
             form.save()
             messages.success(request, f"{surname}, {firstname} added successfully")
             return redirect('add_staff')  # Redirect to avoid re-posting form on refresh
@@ -298,3 +298,25 @@ def deleteStaff(request, idk):
     else:
         messages.error(request, "Invalid request method.")
         return redirect('all_staff')
+
+
+def allocateCourse(request):
+    title = "Course Allocation"
+    if request.method == "POST":
+        form = CourseAllocationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"{form.cleaned_data['course']} Allocated Successfully")
+            return redirect('allocate_course')
+        else:
+            messages.error(request, "Failed to Allocate Course")
+    else:
+        form = CourseAllocationForm()
+    return render(request, 'allocate_courses.html', context={'title': title, 'form': form})
+
+
+def viewAllocatedCourses(request):
+    title = "View Allocated Courses"
+    allocated_courses = CourseAllocation.objects.all()
+    context = {'title': title, 'allocated_courses': allocated_courses}
+    return render(request, 'view_allocated_courses.html', context)
