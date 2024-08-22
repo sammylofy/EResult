@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import FacultyForm, DepartmentForm, ProgrammeForm, SessionForm, CourseForm, StudentForm, StaffForm, \
-    EditStudentForm, CourseAllocationForm
+    EditStudentForm, CourseAllocationForm, CourseEnrolmentForm
 from django.contrib import messages
-from .models import Faculty, Department, Programme, Session, Course, Student, Staff, CourseAllocation
+from .models import Faculty, Department, Programme, Session, Course, Student, Staff, CourseAllocation, CourseEnrolment
 from django.http import JsonResponse
 
 
@@ -320,3 +320,60 @@ def viewAllocatedCourses(request):
     allocated_courses = CourseAllocation.objects.all()
     context = {'title': title, 'allocated_courses': allocated_courses}
     return render(request, 'view_allocated_courses.html', context)
+
+
+# def enrollInCourse(request):
+#     title = "Enroll in Course"
+#     #student = get_object_or_404(Student, user=request.user)  # Assuming a Student is linked to a User
+#     student = get_object_or_404(Student, pk=1)
+#
+#     if request.method == "POST":
+#         form = CourseEnrolmentForm(request.POST)
+#         if form.is_valid():
+#             courses = form.cleaned_data['courses']
+#             session = 1
+#             for course in courses:
+#                 CourseEnrolment.objects.create(student=student, course=course, session=session)
+#             messages.success(request, "Successfully enrolled in the selected courses.")
+#             return redirect('enroll_course')
+#         else:
+#             messages.error(request, "Failed to enroll in the courses. Please correct the errors below.")
+#     else:
+#         form = CourseEnrolmentForm()
+#
+#     context = {
+#         'title': title,
+#         'form': form
+#     }
+#     return render(request, 'enroll_course.html', context)
+
+def enrollInCourse(request):
+    title = "Enroll in Course"
+
+    # Hardcoding a student instance for testing purposes
+    student = get_object_or_404(Student, pk=1)  # Replace '1' with the ID of a specific student
+
+    # For demonstration purposes, you can hardcode these values or get them dynamically
+    current_session = get_object_or_404(Session, pk=1)  # Replace '1' with the ID of a specific session
+    current_semester = '1'  # Replace with the actual semester value
+    current_level = 'ND 1'  # Replace with the actual level value
+
+    if request.method == "POST":
+        form = CourseEnrolmentForm(request.POST, level=current_level, session=current_session)
+        if form.is_valid():
+            student = form.cleaned_data['student']
+            courses = form.cleaned_data['courses']
+            for course in courses:
+                CourseEnrolment.objects.create(student=student, course=course, session=current_session)
+            messages.success(request, "Successfully enrolled in the selected courses.")
+            return redirect('enroll_course')
+        else:
+            messages.error(request, "Failed to enroll in the courses. Please correct the errors below.")
+    else:
+        form = CourseEnrolmentForm(level=current_level, session=current_session)
+
+    context = {
+        'title': title,
+        'form': form
+    }
+    return render(request, 'enroll_course.html', context)

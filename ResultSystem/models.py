@@ -67,7 +67,7 @@ class Session(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
 
     def __str__(self):
-        return f"{self.session_code} {self.status}"
+        return f"{self.session_name}"
 
     class Meta:
         db_table = "session"

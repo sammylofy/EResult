@@ -132,3 +132,39 @@ class CourseAllocationForm(forms.ModelForm):
         fields = [
             'staff', 'course', 'session', 'semester'
         ]
+
+
+# class CourseEnrolmentForm(forms.ModelForm):
+#     courses = forms.ModelMultipleChoiceField(
+#         queryset=Course.objects.all(),
+#         widget=forms.CheckboxSelectMultiple,
+#         required=True
+#     )
+#
+#     class Meta:
+#         model = CourseEnrolment
+#         fields = ['courses']
+
+class CourseEnrolmentForm(forms.Form):
+    student = forms.ModelChoiceField(queryset=Student.objects.all(), required=True)
+    session = forms.ModelChoiceField(queryset=Session.objects.all(), required=True)
+    semester = forms.ChoiceField(choices=[('1', '1'), ('2', '2')], required=True)
+    level = forms.CharField(max_length=20, required=True)
+    courses = forms.ModelMultipleChoiceField(
+        queryset=Course.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+        required=True
+    )
+
+    def __init__(self, *args, **kwargs):
+        level = kwargs.pop('level', None)
+        semester = kwargs.pop('semester', None)
+        session = kwargs.pop('session', None)
+        super(CourseEnrolmentForm, self).__init__(*args, **kwargs)
+
+        if level and semester and session:
+            self.fields['courses'].queryset = Course.objects.filter(
+                level=level,
+                semester=semester,
+                session=session
+            )

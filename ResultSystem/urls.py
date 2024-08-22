@@ -30,4 +30,5 @@ urlpatterns = [
     path('ajax/load-faculties/', views.load_faculties, name='ajax_load_faculties'),
     path('allocate_course/', views.allocateCourse, name ='allocate_course'),
     path('all_allocated_courses/', views.viewAllocatedCourses, name='all_allocated_courses'),
+    path('enroll_course/', views.enrollInCourse, name ='enroll_course'),
 ]
